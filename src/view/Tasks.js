@@ -1,30 +1,50 @@
 import React, { useEffect, useContext } from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Task from '../components/Task';
 import TaskForm from '../components/TaskForm';
 import { TasksContext } from '../contexts/TasksContext';
+import ApiCall from "../api/ApiCall";
+
+import Typography from '@material-ui/core/Typography';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import MLink from '@material-ui/core/Link';
 
 const Tasks = (props) => {
-    console.log("Tasks >>>> ", props)
-    const { toDo, tasks, fetchTaskList } = useContext(TasksContext);
     
+    const { toDo, tasks, taskSetting, toDoSetting } = useContext(TasksContext);
+    
+    // useEffect(() => {
+    //     // fetchTaskList(props.match.params.id);
+    //     ApiCall.get(`/getTaskListByToDoListId/${props.match.params.id}`)
+    // }, [])
+
     useEffect(() => {
-        fetchTaskList(props.match.params.id);
-    }, [])
+        ApiCall.get(`/getTaskListByToDoListId/${props.match.params.id}`).then(response => {
+            toDoSetting(response.data)
+            taskSetting(response.data.task);
+        })
+    }, [toDo])
 
     return (               
         <div>
-            <div style={{height: "55px", paddingTop: "20px"}}>
-                <Link to="/" style={{color: "orange"}}>To-Do List</Link> / Tasks
+            <div style={{height: "55px", paddingTop: "20px", borderBottom: "solid 1px gray", marginBottom: "10px"}}>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <MLink color="inherit" href="/">
+                        <Link to="/" style={{color: "#555", textDecoration: "none"}}>TO-DO List</Link>
+                    </MLink>
+                    <Typography color="textPrimary">Tasks</Typography>
+                </Breadcrumbs>               
             </div>
-            <ul class="collection with-header">
-                <li class="collection-header">
-                    <h4>To-Do: {toDo && toDo.title}</h4>
-                </li>
+            
+            <div>
+                <Typography variant="h4" component="h2">
+                    To-Do: {toDo && toDo.title}
+                </Typography>
+                
                 {tasks && tasks.map(t => (
-                    <Task key={t.id} taskContent={t} />
+                    <Task key={t.id} taskContent={t} toDoId={toDo.id} />
                 ))}
-            </ul>
+            </div>
             <div>
                 <TaskForm toDo={toDo} props={props} />
             </div>

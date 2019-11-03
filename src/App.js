@@ -8,12 +8,14 @@ import ToDoForm from './components/ToDoForm';
 import TasksContextProvider from './contexts/TasksContext';
 import ToDosContextProvider from './contexts/ToDosContext';
 
+import Container from '@material-ui/core/Container';
+
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Header />        
-        <div className="container">
+        <Container maxWidth="lg">
           <Switch>
             <ToDosContextProvider>
               <TasksContextProvider>
@@ -23,7 +25,7 @@ function App() {
               </TasksContextProvider> 
             </ToDosContextProvider>
           </Switch>
-        </div>
+        </Container>
       </div>
     </BrowserRouter>
   );

@@ -1,44 +1,52 @@
-import React from 'react';
-// import $ from 'jquery'
+import React, { useContext } from 'react';
+
+import { TasksContext } from '../contexts/TasksContext';
+
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Typography, Divider, Button  } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import UpdateIcon from '@material-ui/icons/UpdateOutlined';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3, 2),
+    marginBottom: "10px",
+  },
+  marginStyle: {
+      margin: "10px 0px",
+  }
+}));
 
 const Task = props => {
+
+    const { handleUpdateTask, handleDeleteTask } = useContext(TasksContext);
+
+    const classes = useStyles();
     
     return (
-        <li class="collection-item">
-            <h5>{props.taskContent.task_title}</h5>
-            <div>{props.taskContent.task_description}</div>
-            <div className="row" style={{borderTop: "solid 1px gray", paddingTop: "10px", marginTop: "20px"}}>
-                <div className="col s3">Due Date: {props.taskContent.due_date}</div>
-                <div className="col s5">                    
-                    <div className="row">
-                        <div className="col s3">Task Status: </div>
-                        <label className="col s3">
-                            <input name="group1" type="radio" checked />
-                            <span>New</span>
-                        </label>
-                        <label className="col s3">
-                            <input name="group1" type="radio" checked />
-                            <span>Inprocess</span>
-                        </label>
-                        <label className="col s3">
-                            <input name="group1" type="radio" checked />
-                            <span>Done</span>
-                        </label>
-                    </div>
+        
+        <Paper className={classes.root} >
+            <Typography variant="h5" component="h3">
+                {props.taskContent.task_title}
+            </Typography>
+            <Typography component="p">
+                {props.taskContent.task_description}
+            </Typography>
+            <Divider className={classes.marginStyle}/>
+            <Typography component="p">
+                Due Date: {props.taskContent.due_date}  &nbsp; | &nbsp;
+                Status: {props.taskContent.task_status === 1 ? "Active" : "Done"}
+                <div style={{float: "right"}}>
+                    <Button size="small" onClick={(e) => handleUpdateTask(e, props.taskContent.id, props.toDoId)}>
+                        <UpdateIcon /> Update
+                    </Button>
+                    <Button size="small" onClick={(e) => handleDeleteTask(e, props.taskContent.id, props.toDoId)}>
+                        <DeleteIcon /> Delete
+                    </Button>
                 </div>
-                <div className="col s2">
-                    <button className="waves-effect waves-light btn-small">Update</button>
-                </div>
-                <div className="col s2">
-                    <button className="waves-effect waves-light btn-small">Delete</button>
-                </div>
-            </div>
-        </li>
+            </Typography>
+        </Paper>        
     );
 }
-
-// $(document).ready(function(){
-//     $('select').formSelect();
-//   });
 
 export default Task;
