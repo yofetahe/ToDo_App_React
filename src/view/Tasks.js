@@ -13,11 +13,6 @@ const Tasks = (props) => {
     
     const { toDo, tasks, taskSetting, toDoSetting } = useContext(TasksContext);
     
-    // useEffect(() => {
-    //     // fetchTaskList(props.match.params.id);
-    //     ApiCall.get(`/getTaskListByToDoListId/${props.match.params.id}`)
-    // }, [])
-
     useEffect(() => {
         ApiCall.get(`/getTaskListByToDoListId/${props.match.params.id}`).then(response => {
             toDoSetting(response.data)
